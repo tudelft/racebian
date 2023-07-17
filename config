@@ -1,0 +1,27 @@
+IMG_NAME=Racebian
+USE_QCOW2=0
+RELEASE=bullseye
+#BASE_DIR="./"
+WORK_DIR="$BASE_DIR/../../build/pi-img/work"
+DEPLOY_DIR="$BASE_DIR/../../build/pi-img/bin"
+DEPLOY_COMPRESSION=none
+USE_QEMU="0" # can be set to 1 to enable a QEMU emulatable image
+LOCALE_DEFAULT="en_US.UTF-8"
+TARGET_HOSTNAME="kompaan"
+KEYBOARD_KEYMAP="us"
+KEYBOARD_LAYPOUT="English (US)"
+TIMEZONE_DEFAULT="Europe/Amsterdam"
+FIRST_USER_NAME=pi
+FIRST_USER_PASS=pi
+DISABLE_FIRST_BOOT_USER_RENAME=1
+#WPA_ESSID="" # will be configured later to open its own network
+#WPA_PASSWORD=""
+WPA_COUNTRY="NL"
+ENABLE_SSH=1
+#PUBKEY_SSH_FIRST_USER= # can be set to a (or multiple?) authorized_keys entry
+#PUBKEY_ONLY_SSH=1 # disable PW auth
+#SETFCAP= # no idea what this is
+#STAGE_LIST="stage0 stage1" # only compile up to stage1 for now (minimal system). bash variables now, see Makefile
+
+
+

@@ -1,0 +1,4 @@
+#cifs-utils # probably dont need samba
+#libcamera-apps-lite
+#mkvtoolnix # whatever that is
+#python3-picamera2
