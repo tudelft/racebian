@@ -18,6 +18,13 @@ pi-stage2 :
 	rm -f ${EXTRA_DIR}/stage2/SKIP_IMAGES
 	cd ${PIGEN_DIR} && STAGE_LIST="stage0 stage1 ../../${EXTRA_DIR}/stage2" ./build.sh -c ../../config
 
+pi-stage2-image :
+	touch ${PIGEN_DIR}/stage0/SKIP
+	touch ${PIGEN_DIR}/stage1/SKIP
+	touch ${EXTRA_DIR}/stage2/SKIP
+	rm -f ${EXTRA_DIR}/stage2/SKIP_IMAGES
+	cd ${PIGEN_DIR} && STAGE_LIST="stage0 stage1 ../../${EXTRA_DIR}/stage2" ./build.sh -c ../../config
+
 pi-stageK :
 	touch ${PIGEN_DIR}/stage0/SKIP
 	touch ${PIGEN_DIR}/stage1/SKIP
@@ -33,6 +40,10 @@ pi-image-lite :
 
 pi-image-kompaan : pi-image-lite
 	$(MAKE) -f $(THIS_FILE) pi-stageK
+
+pi-flash : 
+	@echo sudo umount "/dev/mmcblk?*"
+	@echo sudo dd bs=4M if=./build/pi-img/bin/your_image of=/dev/mmcblk? status=progress
 
 clean : 
 	rm -rf build
