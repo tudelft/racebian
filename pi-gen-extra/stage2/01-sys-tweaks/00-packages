@@ -1,4 +1,4 @@
-ssh less fbset sudo psmisc strace ed ncdu crda
+ssh vim less fbset sudo psmisc strace ed ncdu crda
 console-setup keyboard-configuration debconf-utils parted
 #build-essential # will do that in the next stage, i think
 manpages-dev bash-completion gdb pkg-config

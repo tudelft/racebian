@@ -1,0 +1,17 @@
+[Unit]
+Description=Access point and authentication server for Wi-Fi and Ethernet
+Documentation=man:hostapd(8)
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/run/hostapd.pid
+Restart=on-failure
+RestartSec=2
+Environment=DAEMON_CONF=/etc/hostapd/hostapd.conf
+EnvironmentFile=-/etc/default/hostapd
+ExecStart=/usr/sbin/hostapd -B -P /run/hostapd.pid -B $DAEMON_OPTS ${DAEMON_CONF}
+ExecStartPost=/usr/sbin/hostapd_cli -a '/etc/hostapd/onHostapdChange.sh' -B
+
+[Install]
+WantedBy=multi-user.target

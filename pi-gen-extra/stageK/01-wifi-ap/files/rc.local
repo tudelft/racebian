@@ -17,6 +17,9 @@ if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
-service dnsmasq start ## not sure if needed, not used now
+#service dnsmasq start ## doesnt seem to be needed
+
+# in case system wasn't properly terminated, make sure the routing table is clean
+ip route flush 0/0
 
 exit 0

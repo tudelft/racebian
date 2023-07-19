@@ -2,3 +2,5 @@ build/
 build/**
 SKIP
 SKIP_IMAGES
+linux/
+linux/**

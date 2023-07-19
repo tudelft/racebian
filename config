@@ -1,11 +1,16 @@
 IMG_NAME=Racebian
 USE_QCOW2=0
+USE_QEMU="0" # can be set to 1 to enable a QEMU emulatable image
 RELEASE=bullseye
+
+# paths workaround to have the pi-gen as a submodule
 #BASE_DIR="./"
+mkdir -p "$BASE_DIR/../../build/pi-img/work"
+mkdir -p "$BASE_DIR/../../build/pi-img/bin"
 WORK_DIR="$(realpath "$BASE_DIR/../../build/pi-img/work")"
 DEPLOY_DIR="$(realpath "$BASE_DIR/../../build/pi-img/bin")"
 DEPLOY_COMPRESSION=none
-USE_QEMU="0" # can be set to 1 to enable a QEMU emulatable image
+
 LOCALE_DEFAULT="en_US.UTF-8"
 TARGET_HOSTNAME="kompaan"
 KEYBOARD_KEYMAP="us"
@@ -22,6 +27,12 @@ ENABLE_SSH=1
 #PUBKEY_ONLY_SSH=1 # disable PW auth
 #SETFCAP= # no idea what this is
 #STAGE_LIST="stage0 stage1" # only compile up to stage1 for now (minimal system). bash variables now, see Makefile
+
+#### CUSTOM OPTIONS ####
+export WIFI_AP_SSID=kompaan
+export WIFI_AP_PASSPHRASE=betaflight
+export ROUTE_THROUGH_CLIENTS=1
+
 
 
 

@@ -45,6 +45,20 @@ pi-flash :
 	@echo sudo umount "/dev/mmcblk?*"
 	@echo sudo dd bs=4M if=./build/pi-img/bin/your_image of=/dev/mmcblk? status=progress
 
-clean : 
+pi-routing-up : 
+	@sysctl -w net.ipv4.ip_forward=1
+# add postrouting rule, unless already present
+	@iptables -t nat -C POSTROUTING -o enxac91a193ecd6 -s 10.0.0.1 -j MASQUERADE || iptables -t nat -A POSTROUTING -o enxac91a193ecd6 -s 10.0.0.1 -j MASQUERADE
+
+pi-routing-down : 
+# || true to not treat missing rule as an error
+	@iptables -t nat -D POSTROUTING -o enxac91a193ecd6 -s 10.0.0.1 -j MASQUERADE || true
+	@sysctl -w net.ipv4.ip_forward=0
+
+pi-connect : pi-routing-up
+# TODO: should this be a prerequisite?
+	ssh -X pi@10.0.0.1
+
+clean : pi-routing-down
 	rm -rf build
 
