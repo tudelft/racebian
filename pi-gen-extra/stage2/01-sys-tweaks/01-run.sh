@@ -24,6 +24,8 @@ s/^#?[[:blank:]]*PasswordAuthentication[[:blank:]]*yes[[:blank:]]*$/PasswordAuth
 fi
 
 on_chroot << EOF
+systemctl disable dphys-swapfile.service # swap off!
+sudo systemctl disable avahi-daemon # who needs this?
 systemctl disable hwclock.sh
 systemctl disable nfs-common
 systemctl disable rpcbind
