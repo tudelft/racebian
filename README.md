@@ -29,9 +29,22 @@ zip dosfstools libarchive-tools libcap2-bin grep rsync xz-utils file git curl \
 bc qemu-utils kpartx gpg pigz make
 ```
 
+Generate the default locale used in the pi images (which we'll keep):
+```bash
+sudo locale-gen en_US.UTF-8
+```
+
 Also, to cross-compile the RT kernel:
 ```bash
 sudo apt install git bc bison flex libssl-dev make libc6-dev libncurses5-dev crossbuild-essential-arm64
+```
+
+To use BF configurator via usb forwarding later, install this:
+```bash
+sudo apt install linux-tools-virtual linux-tools-6.1.0-1016-oem hwdata
+#sudo modprobe vhci-hcd
+#sudo usbip list -r 10.0.0.1 # optional
+#sudo usbip attach -r 10.0.0.1 -b 1-1
 ```
 
 And, to cross-compile BF-configurator: TODO: improve this abomination
@@ -47,10 +60,10 @@ Then clone this repo *in an ext2 or ext4 filesystem, NOT NTFS*:
 git clone --recurse-submodules git@github.com:tblaha/pi-kompaan.git
 ```
 
-Build the image. The build script uses change-root. Do not interrupt it with CTRL-C or else you may have to reboot your system.
+Build the image *with a stable Ethernet connection* (it didnt find some packages when I tried via wifi and quit). The build script uses change-root. Do not interrupt it with CTRL-C or else you may have to reboot your system.
 ```bash
 # sudo make clean # optional
-sudo make pi-image-kompaan
+LC_ALL=en_US.UTF-8 sudo make pi-image-kompaan
 ```
 
 Flash the image. Take extreme care with this command, as it can break your system.
@@ -58,3 +71,10 @@ Flash the image. Take extreme care with this command, as it can break your syste
 sudo umount /dev/mmcblk*
 sudo dd bs=4M if=./build/pi-img/bin/<NAME OF THE IMAGE> of=/dev/<SD CARD DEVICE, NOT PARTITION, ENDS IN blkX> status=progress
 ```
+
+## TODO:
+
+-[ ] remove the cross compiled BF-configurator, if usbip works.
+-[ ] write ansible playbooks for uploading betaflight `hex` files
+-[ ] dockerize this to eliminate build-system dependencies
+-[ ] add betaflight_race receiver and optitrack code

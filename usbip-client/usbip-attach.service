@@ -1,0 +1,11 @@
+[Unit]
+Description=USB-IP Attach
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=REPLACE_ME 10.0.0.1 -q
+ExecStop=/bin/rm /var/spool/usbip/attach  ;  /bin/bash -c "while [[ -d /proc/"$MAINPID" ]]; do sleep 1; done"
+
+[Install]
+WantedBy=multi-user.target

@@ -1,11 +1,11 @@
 #!/bin/bash -e
 
-# get sources
+# get sources (latest non-buster kernel according to https://archive.raspberrypi.org/debian/pool/main/r/raspberrypi-firmware/)
 rm -rf "${STAGE_WORK_DIR}/linux"
-git clone --depth=1 https://github.com/raspberrypi/linux "${STAGE_WORK_DIR}/linux"
+git clone --depth=1 --branch=1.20230405 https://github.com/raspberrypi/linux "${STAGE_WORK_DIR}/linux"
 cd ${STAGE_WORK_DIR}/linux
 
-# get and apply RT patch-set. IMPORTANT TODO: do not use hardcoded versions, or git clone only this branch above
+# get and apply RT patch-set. Not the same patchlevel as above, hope it still works
 wget https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/6.1/patch-6.1.38-rt13-rc1.patch.gz
 gunzip patch-6.1.38-rt13-rc1.patch.gz
 cat patch-6.1.38-rt13-rc1.patch | patch -p1
@@ -30,7 +30,5 @@ cp arch/arm64/boot/Image "${ROOTFS_DIR}/boot/${KERNEL}-rt.img"
 cp arch/arm64/boot/dts/broadcom/*.dtb "${ROOTFS_DIR}/boot/"
 cp arch/arm64/boot/dts/overlays/*.dtb* "${ROOTFS_DIR}/boot/overlays/"
 cp arch/arm64/boot/dts/overlays/README "${ROOTFS_DIR}/boot/overlays/"
-
-# TODO. Patch config to use -rt kernel
 
 cd "${BASE_DIR}"

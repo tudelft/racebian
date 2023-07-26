@@ -5,10 +5,10 @@ RELEASE=bullseye
 
 # paths workaround to have the pi-gen as a submodule
 #BASE_DIR="./"
-mkdir -p "$BASE_DIR/../../build/pi-img/work"
-mkdir -p "$BASE_DIR/../../build/pi-img/bin"
-WORK_DIR="$(realpath "$BASE_DIR/../../build/pi-img/work")"
-DEPLOY_DIR="$(realpath "$BASE_DIR/../../build/pi-img/bin")"
+mkdir -p "$BASE_DIR/../../build/pi-img/"
+mkdir -p "$BASE_DIR/../../imgs/"
+WORK_DIR="$(realpath "$BASE_DIR/../../build/pi-img/")"
+DEPLOY_DIR="$(realpath "$BASE_DIR/../../imgs/")"
 DEPLOY_COMPRESSION=none
 
 LOCALE_DEFAULT="en_US.UTF-8"

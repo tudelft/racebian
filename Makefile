@@ -1,4 +1,4 @@
-
+SHELL := /bin/bash
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 
 PIGEN_DIR = "ext/pi-gen"
@@ -43,26 +43,62 @@ pi-image-kompaan : pi-image-lite
 
 pi-flash : 
 	@echo sudo umount "/dev/mmcblk?*"
-	@echo sudo dd bs=4M if=./build/pi-img/bin/your_image of=/dev/mmcblk? status=progress
+	@echo sudo dd bs=4M if=./imgs/your_image of=/dev/mmcblk? status=progress
 
 clean :
 	rm -rf build
 
-## ----
+clean-imgs : 
+	rm -rf imgs
+
+
+## ---- Networking functions ---- ##
+
+# if IFACE is not specified, try to guess based on kernel routing tab with 
+# the idea that any interace is fine that has a route with:
+# A: default Destination (0.0.0.0)
+# B: NOT gateway 10.0.0.1 (the pi)
+IFACE ?= $(shell route -n | grep "^0.0.0.0" | grep -v "10.0.0.1" | head -1 | awk '{print $$8}')
 
 pi-routing-up : 
+# enable routing
 	@sysctl -w net.ipv4.ip_forward=1
 # add postrouting rule, unless already present
-	@iptables -t nat -C POSTROUTING -o "${IFACE}" -s 10.0.0.1 -j MASQUERADE || iptables -t nat -A POSTROUTING -o "${IFACE}" -s 10.0.0.1 -j MASQUERADE
+	@echo "Guessing that interface ${IFACE} has internet access."
+#@iptables -t nat -C POSTROUTING -o "${IFACE}" -s 10.0.0.1 -j MASQUERADE || iptables -t nat -A POSTROUTING -o "${IFACE}" -s 10.0.0.1 -j MASQUERADE
+# create a new chain, ignoring errors if it already exists ("-")
+	-@iptables -t nat -N fw-pi
+# flush all of its rules in case it exists already
+	@iptables -t nat -F fw-pi
+# fwd all source 10.0.0.1 traffic to the new chain (delete then add to ensure only one)
+	-@iptables -t nat -D POSTROUTING -s 10.0.0.1 -j fw-pi
+	@iptables -t nat -A POSTROUTING -s 10.0.0.1 -j fw-pi
+# allow outbound traffic on the IFACE that has connection to the internet gateway
+	@iptables -t nat -A fw-pi -o "${IFACE}" -s 10.0.0.1 -j MASQUERADE
+	@echo "Finished attempting iptables setup"
 
 pi-routing-down : 
-# || true to not treat missing rule as an error
-	@iptables -t nat -D POSTROUTING -o "${IFACE}" -s 10.0.0.1 -j MASQUERADE || true
+# do not forward POSTROUTING to fw-pi chain (ignore errors if rule already deleted)
+	-@iptables -t nat -D POSTROUTING -s 10.0.0.1 -j fw-pi
+# flush fw-pi table
+	-@iptables -t nat -F fw-pi
+# delete fw-pi tables
+	-@iptables -t nat -X fw-pi
+# disable routing
 	@sysctl -w net.ipv4.ip_forward=0
 
 pi-connect : pi-routing-up
 # TODO: should this be a prerequisite?
-	ssh -X pi@10.0.0.1
+	ssh -X -C -c aes128-ctr pi@10.0.0.1
 
-pi-upload :
-	
+pi-attach-usb : 
+	modprobe vhci-hcd
+	cp ./usbip-client/usbip-attach.service /etc/systemd/system/
+	sed -i 's/REPLACE_ME/$(subst /,\/,$(shell pwd))\/usbip-client\/usbip-attach.sh/g' /etc/systemd/system/usbip-attach.service
+	for port in 0 1 2 3 4 5 6 7 8 9 ; do \
+		usbip detach -p $$port; \
+	done
+	systemctl daemon-reload
+	systemctl stop usbip-attach.service
+	systemctl start usbip-attach.service
+

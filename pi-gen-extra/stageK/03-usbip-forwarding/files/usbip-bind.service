@@ -1,0 +1,11 @@
+[Unit]
+Description=USB-IP Bindings
+After=usbipd.service
+Requires=usbipd.service
+
+[Service]
+ExecStart=/opt/usbip/usbip-bind.sh -q
+ExecStop=/bin/rm /var/spool/usbip/bind  ; /bin/bash -c "while [[ -d /proc/"$MAINPID" ]]; do sleep 1; done"
+
+[Install]
+WantedBy=multi-user.target

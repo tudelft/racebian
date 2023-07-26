@@ -26,6 +26,6 @@ npm_config_target_arch=arm64 npm_config_target_platform=linux yarn gulp debug --
 
 # install the binaries and create a symlink
 cp -R "${BF_DIR}/debug/betaflight-configurator/armv8" "${ROOTFS_DIR}/opt/betaflight-configurator"
-ln -nsf "${ROOTFS_DIR}/opt/betaflight-configurator/betaflight-configurator" "${ROOTFS_DIR}/usr/bin/betaflight-configurator"
+ln -nsf "/opt/betaflight-configurator/betaflight-configurator" "${ROOTFS_DIR}/usr/bin/betaflight-configurator"
 
 cd "${BASE_DIR}"

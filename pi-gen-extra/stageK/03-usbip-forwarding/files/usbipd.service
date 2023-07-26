@@ -1,0 +1,11 @@
+[Unit]
+Description=USB-IP daemon service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/usbipd
+
+[Install]
+WantedBy=multi-user.target

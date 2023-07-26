@@ -1,6 +1,7 @@
 build/
-build/**
 SKIP
 SKIP_IMAGES
 linux/
-linux/**
+!pi-gen-extra/stage2/**/SKIP
+!pi-gen-extra/stageK/**/SKIP
+imgs/

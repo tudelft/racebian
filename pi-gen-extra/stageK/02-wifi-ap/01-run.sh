@@ -23,10 +23,13 @@ systemctl enable dnsmasq
 EOF
 
 
-## enable ipv4 forwarding
+## enable ipv4 forwarding on clientConnect
 if [ "${ROUTE_THROUGH_CLIENTS}" == "1" ]; then
     install -m 755 files/rc.local   	"${ROOTFS_DIR}/etc/rc.local"
     install -m 755 files/onHostapdChange.sh "${ROOTFS_DIR}/etc/hostapd/onHostapdChange.sh"
     # modify the service file with a post-hook to enable the onHostapdChange script
     install -m 755 files/hostapd.service "${ROOTFS_DIR}/lib/systemd/system/hostapd.service"
 fi
+
+## disable ipv6 to reduce interrupt overhead
+echo "ipv6.disable=1" >> "${ROOTFS_DIR}/boot/cmdline.txt"
