@@ -1,9 +1,0 @@
-Index: jessie-stage2/rootfs/boot/cmdline.txt
-===================================================================
---- jessie-stage2.orig/rootfs/boot/cmdline.txt
-+++ jessie-stage2/rootfs/boot/cmdline.txt
-@@ -6,3 +6,4 @@
- rootwait
- quiet
- init=/usr/lib/raspberrypi-sys-mods/firstboot
-+ipv6.disable=1
