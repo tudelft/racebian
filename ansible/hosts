@@ -1,9 +1,0 @@
-[linux]
-
-10.0.0.1
-
-[linux:vars]
-
-ansible_user=pi
-ansible_password=pi
-
