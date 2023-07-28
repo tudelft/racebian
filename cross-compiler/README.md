@@ -50,13 +50,10 @@ This means that the pi needs to be connected at least during the first time to d
 Once setup is complete, this is the magic command:
 ```bash
 sudo sysctl -w net.ipv4.ip_forward=1 # no need, if you did make pi-routing-up
-cd package/root/you/want/to/build
-docker run \
-    -v rootfs:/rootfs \
-    --mount type=bind,src=./,dst=/package \
+cd /path/to/package/root/you/want/to/build
+docker run -v rootfs:/rootfs --mount type=bind,src=./,dst=/package \
     [optional docker arguments] \
-    pi-cross
-    [optional container arguments]
+    pi-cross [optional container arguments]
 ```
 
 Optional docker arguments:
@@ -67,9 +64,9 @@ Optional docker arguments:
 Optional container arguments:
 ```bash
 --skip-rsync                    # do not synchronise rootfs with pi. If no libraries changed and it causes overhead, use this
---clean-build:                  # delete all existing build files before compilation
+--clean-build                   # delete all existing build files before compilation
 --debug                         # sets -DCMAKE_BUILD_TYPE=Debug
---deploy=/some/directory/on/pi: # upload the build directory to pi using rsync
+--deploy=/some/directory/on/pi: # upload the build directory to pi using rsync after building
 ```
 
 ## Handy Docker commands

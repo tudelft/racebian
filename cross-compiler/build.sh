@@ -48,7 +48,7 @@ then
     echo -n "Rsync-ing rootfs... "
     rsync -tr --delete-after --links --copy-unsafe-links \
         --rsh "/usr/bin/sshpass -p $REMOTE_PASSWORD ssh -o StrictHostKeyChecking=no -l $REMOTE_USER" \
-        --rsync-path="sudo rsync" \
+        --rsync-path="sudo rsync" --timeout=3 \
         --include='/' \
         --include='/lib/' \
         --include='/lib/***' \
@@ -57,7 +57,7 @@ then
         --exclude='*' \
         $REMOTE_USER@$REMOTE_IP:/ $SYSROOT \
         || true # do not fail on error, for isntance, because pi is down
-    echo "done or failed"
+    echo "Rsync done or failed"
 fi
 
 # check for empty rootfs (for instance because rsync failed on first run)
@@ -97,9 +97,9 @@ then
     cd /package && \
     rsync -rR --delete-after --links --copy-unsafe-links --perms \
         --rsh "/usr/bin/sshpass -p $REMOTE_PASSWORD ssh -o StrictHostKeyChecking=no -l $REMOTE_USER" \
-        --rsync-path="sudo rsync" \
+        --rsync-path="sudo rsync" --timeout=3 \
         build-$GNU_HOST $REMOTE_USER@$REMOTE_IP:"$deploy"
-    echo "done"
+    echo "build deployed"
 fi
 
 echo "finished"

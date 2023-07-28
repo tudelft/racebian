@@ -1,3 +1,0 @@
-libgbm-dev
-x11-apps
-mesa-utils # TODO: are these the best meta packages?
