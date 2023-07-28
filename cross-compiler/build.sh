@@ -1,20 +1,21 @@
 #!/bin/bash
 
 # handle arguments
-
-# flags
+#deploy=$(echo "$@" | awk -F= '{a[$1]=$2} END {print(a["--deploy"])}')
+# key-value pairs (HOW IS THERE NOT A BUILT IN FOR THIS?)
 while test $# != 0
 do
-    case "$1" in
+    left=$(echo "$1" | cut -d "=" -f 1)
+    right=$(echo "$1" | cut -d "=" -f 2)
+    case "$left" in
     --skip-rsync) skip_rsync=t ;;
     --clean-build) clean_build=t ;;
     --debug) debug=t ;;
+    --deploy) deploy=$right ;;
     esac
     shift
 done
 
-# key-value pairs (HOW IS THERE NOT A BUILT IN FOR THIS?)
-deploy=$(echo "$@" | awk -F= '{a[$1]=$2} END {print(a["--deploy="])}')
 
 # check for mounts
 if ! mountpoint -q $SYSROOT
@@ -44,7 +45,8 @@ then
     # From the manpage or rsync:
     # --links --copy-unsafe-links
     #       Turn all unsafe symlinks into files and create all safe symlinks.
-    rsync -vtr --delete-after --links --copy-unsafe-links \
+    echo -n "Rsync-ing rootfs... "
+    rsync -tr --delete-after --links --copy-unsafe-links \
         --rsh "/usr/bin/sshpass -p $REMOTE_PASSWORD ssh -o StrictHostKeyChecking=no -l $REMOTE_USER" \
         --rsync-path="sudo rsync" \
         --include='/' \
@@ -55,6 +57,7 @@ then
         --exclude='*' \
         $REMOTE_USER@$REMOTE_IP:/ $SYSROOT \
         || true # do not fail on error, for isntance, because pi is down
+    echo "done or failed"
 fi
 
 # check for empty rootfs (for instance because rsync failed on first run)
@@ -67,7 +70,9 @@ fi
 
 if [ "$clean_build" == t ]
 then
+    echo -n "Cleaning build directory... "
     rm -rf /package/build-$GNU_HOST
+    echo "done"
 fi
 
 mkdir -p /package/build-$GNU_HOST
@@ -82,14 +87,21 @@ then
 fi
 
 cmake -DCMAKE_TOOLCHAIN_FILE=$CROSS_TOOLCHAIN -DCMAKE_SYSROOT=$SYSROOT $CMAKE_EXTRA ..
+#cmake --build . --parallel 4 # looks cleaner, but somehow broken
 make -j4
 
 # upload if necessary
-if [ ! -z $deploy ]
+if ! [ -z $deploy ]
 then
-    rsync -vrR --delete-after --links --copy-unsafe-links --perms \
+    echo -n "Deploying build... "
+    cd /package && \
+    rsync -rR --delete-after --links --copy-unsafe-links --perms \
         --rsh "/usr/bin/sshpass -p $REMOTE_PASSWORD ssh -o StrictHostKeyChecking=no -l $REMOTE_USER" \
         --rsync-path="sudo rsync" \
-        /package/build-$GNU_HOST $REMOTE_USER@$REMOTE_IP:"$deploy"
+        build-$GNU_HOST $REMOTE_USER@$REMOTE_IP:"$deploy"
+    echo "done"
 fi
+
+echo "finished"
+echo $deploy
 exit 0

@@ -4,20 +4,18 @@
 
 Create a docker image that does all the compilations and maintains a synched copy of the RPi rootfs.
 
-1. Derive a docker image from debian:bullseye (to get identical environemtn including glibc2.31)
+1. Derive a docker image from debian:bullseye (to get identical environment including glibc2.31)
 2. install the cross-compile toolchains in it
-3. rsync the rootfs on every `docker buildx`, but fail silenty
-4. expose an ENTRYPOINT that handles the building by
-  - mounting the package on `docker run`
-  - passing in the cmake WD
-  - passing in the cmake arguments
-  - alias the command to something nicer, potetially with make, even though that would be quite confusion
-5. build and upload with an ansible playbook
+3. expose an ENTRYPOINT that handles the building by
+  1. keeping an updated copy of the raspberries `lib` and `usr` directies available to the container, for correct includes/linking.
+  2. using cmake and make on a specified local package
+  3. optionally deploys the build-files to a specified location on the pi
 
+Read further for setup and the eventual build-commands
 
 ## Docker image setup
 
-Prerequesites (execute as local user):
+Prerequesites (execute as local user) https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04:
 ```bash
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -42,7 +40,7 @@ docker volume create rootfs
 
 On the first time running the container a lot of environment files are copied from the pi to the (persistent) docker volume we just created.
 In subsequent builds they will only be updated when something on the pi changes.
-This step can also be skipped manually using the `--slip_rsync` flag.
+This step can also be skipped manually using the `--slip-rsync` flag.
 
 This means that the pi needs to be connected at least during the first time to do the initial sync.
 
@@ -63,15 +61,15 @@ docker run \
 
 Optional docker arguments:
 ```bash
--it --entrypoint=/bin/bash: do not build, but drop into shell. Do not use together with container arguments below!
+-it --entrypoint=/bin/bash # do not build, but drop into shell. Do not use together with container arguments below!
 ```
 
 Optional container arguments:
 ```bash
---skip-rsync: do not synchronise rootfs with pi. If no libraries changed and it causes overhead, use this
---clean-build: delete all existing build files before compilation
---debug: enables -DCMAKE_BUILD_TYPE=Debug
---deploy=/some/directory/on/pi: upload the build directory to pi using rsync
+--skip-rsync                    # do not synchronise rootfs with pi. If no libraries changed and it causes overhead, use this
+--clean-build:                  # delete all existing build files before compilation
+--debug                         # sets -DCMAKE_BUILD_TYPE=Debug
+--deploy=/some/directory/on/pi: # upload the build directory to pi using rsync
 ```
 
 ## Handy Docker commands
