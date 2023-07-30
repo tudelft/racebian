@@ -34,7 +34,8 @@ ENV PACKAGE /package
 
 # cmake config
 #ENV CROSS_INSTALL_PREFIX=/usr/$GNU_HOST
-ENV CROSS_INSTALL_PREFIX=$SYSROOT/usr
+#ENV CROSS_INSTALL_PREFIX="$SYSROOT/usr; $SYSROOT/lib; $SYSROOT/usr/lib/aarch64-linux-gnu"
+ENV CROSS_INSTALL_PREFIX=
 ENV CROSS_TOOLCHAIN=/cmake/$CROSS_ARCH.toolchain.cmake
 
 # https://cmake.org/cmake/help/v3.16/manual/cmake-toolchains.7.html#cross-compiling-for-linux
@@ -55,6 +56,8 @@ RUN echo "set(CMAKE_SYSTEM_NAME Linux)" >> $CROSS_TOOLCHAIN && \
 # CMAKE_PREFIX_PATH seems not to be taken into account, so we'll skip them in
 # good faith.
 # https://stackoverflow.com/questions/10599038/can-i-skip-cmake-compiler-tests-or-avoid-error-unrecognized-option-rdynamic#comment86573469_30642130
+
+#RUN ln -sf /rootfs/usr/lib/ld-linux-aarch64.so.1 /lib/ld-linux-aarch64.so.1
 
 # remote config
 ENV REMOTE_IP 10.0.0.1
