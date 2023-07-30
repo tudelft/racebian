@@ -51,9 +51,9 @@ Once setup is complete, this is the magic command:
 ```bash
 sudo sysctl -w net.ipv4.ip_forward=1 # no need, if you did make pi-routing-up
 cd /path/to/package/root/you/want/to/build
-docker run -v rootfs:/rootfs --mount type=bind,src=./,dst=/package \
+docker run [optional container arguments] -v rootfs:/rootfs --mount type=bind,src=./,dst=/package \
     [optional docker arguments] \
-    pi-cross [optional container arguments]
+    pi-cross
 ```
 
 Optional docker arguments:
