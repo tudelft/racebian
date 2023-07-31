@@ -1,2 +1,9 @@
-minicom
 tree
+# for UART debugging
+minicom
+# for ROVIO cross comp/linking
+libeigen3-dev
+libyaml-cpp-dev
+libboost-dev
+libcanberra-gtk-module
+libcanberra-gtk3-module

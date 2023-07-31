@@ -66,11 +66,17 @@ clean-imgs :
 IFACE ?= $(shell route -n | grep "^0.0.0.0" | grep -v "10.0.0.1" | head -1 | awk '{print $$8}')
 
 pi-routing-up : 
+	@echo "Guessing that interface ${IFACE} has internet access."
 # enable routing
 	@sysctl -w net.ipv4.ip_forward=1
-# add postrouting rule, unless already present
-	@echo "Guessing that interface ${IFACE} has internet access."
-#@iptables -t nat -C POSTROUTING -o "${IFACE}" -s 10.0.0.1 -j MASQUERADE || iptables -t nat -A POSTROUTING -o "${IFACE}" -s 10.0.0.1 -j MASQUERADE
+# docker changes the default filter FORWARD policy from ACCEPT to DROP.
+# fix that with an explicit rule that allows outbound from the pi by default,
+# but inbound only for related or established connections that originated from
+# the pi (see Unix conntrack)
+	-@iptables -t filter -D FORWARD -s 10.0.0.1 -o "${IFACE}" -j ACCEPT
+	-@iptables -t filter -D FORWARD -d 10.0.0.1 -i "${IFACE}" -m state --state RELATED,ESTABLISHED -j ACCEPT
+	@iptables -t filter -A FORWARD -s 10.0.0.1 -i "${IFACE}" -j ACCEPT
+	@iptables -t filter -A FORWARD -d 10.0.0.1 -i "${IFACE}" -m state --state RELATED,ESTABLISHED -j ACCEPT
 # create a new chain, ignoring errors if it already exists ("-")
 	-@iptables -t nat -N fw-pi
 # flush all of its rules in case it exists already
@@ -89,6 +95,9 @@ pi-routing-down :
 	-@iptables -t nat -F fw-pi
 # delete fw-pi tables
 	-@iptables -t nat -X fw-pi
+# delete accept rule in filter table
+	-@iptables -t filter -D FORWARD -s 10.0.0.1 -o "${IFACE}" -j ACCEPT
+	-@iptables -t filter -D FORWARD -d 10.0.0.1 -i "${IFACE}" -m state --state RELATED,ESTABLISHED -j ACCEPT
 # disable routing
 	@sysctl -w net.ipv4.ip_forward=0
 

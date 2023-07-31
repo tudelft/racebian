@@ -45,8 +45,13 @@ then
     # From the manpage or rsync:
     # --links --copy-unsafe-links
     #       Turn all unsafe symlinks into files and create all safe symlinks.
+
+    # reason for --ignore-errors:
+    # When backing up a live system, some changes can happen causing IO errors
+    # This is not bad, but rsync then skips file deletion, which shouldnt 
+    # happen, so ignore the errors
     echo -n "Rsync-ing rootfs... "
-    rsync -tr --delete-after --links --copy-unsafe-links \
+    rsync -tr --delete-after --links --copy-unsafe-links --ignore-errors \
         --rsh "/usr/bin/sshpass -p $REMOTE_PASSWORD ssh -o StrictHostKeyChecking=no -l $REMOTE_USER" \
         --rsync-path="sudo rsync" --timeout=3 \
         --include='/' \
@@ -86,9 +91,11 @@ then
     CMAKE_EXTRA=$CMAKE_EXTRA "-DCMAKE_BUILD_TYPE=Debug"
 fi
 
-cmake -DCMAKE_TOOLCHAIN_FILE=$CROSS_TOOLCHAIN -DCMAKE_SYSROOT=$SYSROOT $CMAKE_EXTRA ..
+cmake -DCMAKE_TOOLCHAIN_FILE=$CROSS_TOOLCHAIN $CMAKE_EXTRA ..
 #cmake --build . --parallel 4 # looks cleaner, but somehow broken
-make -j4
+make -j8 # TODO: make the thread count a parameter that can be passed to docker
+
+# TODO: error handling, so we dont upload failed builds
 
 # upload if necessary
 if ! [ -z $deploy ]
