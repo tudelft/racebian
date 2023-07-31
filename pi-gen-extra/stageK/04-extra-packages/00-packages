@@ -1,7 +1,7 @@
 tree
 # for UART debugging
 minicom
-# for ROVIO cross comp/linking
+# for ROVIO cross compile/linking
 libeigen3-dev
 libyaml-cpp-dev
 libboost-dev

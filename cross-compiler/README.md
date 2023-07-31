@@ -25,51 +25,55 @@ sudo apt install docker-ce
 sudo usermod -aG docker ${USER}
 reboot # or open use su - ${USER} for the rest
 ```
+<!--
+Install a plugin to connect to the pi easier:
+```bash
+docker plugin install vieux/sshfs
+```
+-->
 
 Setup of the image:
 ```bash
 cd cross-compiler
 docker buildx build -f Dockerfile.cross --tag=pi-cross .
-docker volume create rootfs
+docker volume create rootfs # not sure where this is actually saved on disk... but somewhere
 ```
 
 ## Running the build container to build for Raspberry Pi
 
 
-### First time running
+Once setup is complete, this is the magic command:
+```bash
+sudo sysctl -w net.ipv4.ip_forward=1 # if you did make pi-routing-up, this can be skipped
+cd /path/to/package/root/you/want/to/build
+docker run -v rootfs:/rootfs --mount type=bind,src=./,dst=/package pi-cross --sync
+```
 
-On the first time running the container a lot of environment files are copied from the pi to the (persistent) docker volume we just created.
-In subsequent builds they will only be updated when something on the pi changes.
-This step can also be skipped manually using the `--slip-rsync` flag.
+On exit, all build files are in the folder `build-aarch64-linux-gnu`.
+
+On the first time running the container a lot of environment files are copied from the pi to the (persistent) docker volume we just created (takes roughly 10min on my wifi connection).
+In subsequent builds they will only be updated when something on the pi changes, but checking for updates still takes time (+- 10sec). You can skip this step by ommitting `--sync`.
 
 This means that the pi needs to be connected at least during the first time to do the initial sync.
 
 
-### Cross compile!
+### Optional container arguments 
 
-Once setup is complete, this is the magic command:
+put at the _end_ of the command above:
 ```bash
-sudo sysctl -w net.ipv4.ip_forward=1 # no need, if you did make pi-routing-up
-cd /path/to/package/root/you/want/to/build
-docker run [optional container arguments] -v rootfs:/rootfs --mount type=bind,src=./,dst=/package \
-    [optional docker arguments] \
-    pi-cross
-```
-
-Optional docker arguments:
-```bash
--it --entrypoint=/bin/bash # do not build, but drop into shell. Do not use together with container arguments below!
-```
-
-Optional container arguments:
-```bash
---skip-rsync                    # do not synchronise rootfs with pi. If no libraries changed and it causes overhead, use this
---clean-build                   # delete all existing build files before compilation
+--sync                          # syncronize the rootfs with the pi. Do this on first command, or if libraries/includes changed in the /lib or /usr dir of the pi. Omitting is much faster, of course.
+--clean-build                   # deletes the entire build-aarch64-linux-gnu folder from the local tree before compilation
 --debug                         # sets -DCMAKE_BUILD_TYPE=Debug
---deploy=/some/directory/on/pi: # upload the build directory to pi using rsync after building
+--deploy=/some/directory/on/pi: # upload the build-aarch64-linux-gnu directory to pi using rsync after building
+--processes=8:                  # passed to make as make -j <processes>. Default is 8.
 ```
 
 ## Handy Docker commands
+
+The container can be run interactively (the building is skipped and a shell is opened). Do not use in conjunction with any of the arguments above.
+```bash
+docker run -it --entrypoint=/bin/bash -v rootfs:/rootfs --mount type=bind,src=./,dst=/package pi-cross
+```
 
 Remove all existing containers:
 ```bash
