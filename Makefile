@@ -75,7 +75,7 @@ pi-routing-up :
 # the pi (see Unix conntrack)
 	-@iptables -t filter -D FORWARD -s 10.0.0.1 -o "${IFACE}" -j ACCEPT
 	-@iptables -t filter -D FORWARD -d 10.0.0.1 -i "${IFACE}" -m state --state RELATED,ESTABLISHED -j ACCEPT
-	@iptables -t filter -A FORWARD -s 10.0.0.1 -i "${IFACE}" -j ACCEPT
+	@iptables -t filter -A FORWARD -s 10.0.0.1 -o "${IFACE}" -j ACCEPT
 	@iptables -t filter -A FORWARD -d 10.0.0.1 -i "${IFACE}" -m state --state RELATED,ESTABLISHED -j ACCEPT
 # create a new chain, ignoring errors if it already exists ("-")
 	-@iptables -t nat -N fw-pi

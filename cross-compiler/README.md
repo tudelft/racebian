@@ -44,7 +44,7 @@ docker volume create rootfs # not sure where this is actually saved on disk... b
 
 Once setup is complete, this is the magic command:
 ```bash
-sudo sysctl -w net.ipv4.ip_forward=1 # if you did make pi-routing-up, this can be skipped
+sudo sysctl -w net.ipv4.ip_forward=1 # if you previously did make pi-routing-up or make pi-connect, this can be skipped
 cd /path/to/package/root/you/want/to/build
 docker run -v rootfs:/rootfs --mount type=bind,src=./,dst=/package pi-cross --sync
 ```

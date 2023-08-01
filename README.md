@@ -16,7 +16,7 @@ sudo apt install make iptables
 3. To expose the Pi zero's USB port to your local laptop: `sudo make pi-attach-usb`
 4. To connect to the Pi, run `sudo make pi-connect` and enter password (`pi` by default).
     - This also sets up appropriate `iptables` rules on the host so that the pi can access the outside world through another interface on the host computer.
-    - If you can connect, but the `pi` still doesnt have internet, try to reconnect to the Wifi, or run `sudo route add default gw 10.0.0.<your_ip> wlan0`
+    - ~~If you can connect, but the `pi` still doesnt have internet, try to reconnect to the Wifi, or run `sudo route add default gw 10.0.0.<your_ip> wlan0`~~ (should be fixed in release 0.3.0)
 
 ## Deploy cmake applications on the Pi
 
