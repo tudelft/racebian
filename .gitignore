@@ -1,5 +1,8 @@
 build/
-SKIP
 SKIP_IMAGES
 linux/
 imgs/
+
+# do not track SKIP files in stage dirs, but do track them in our substage dirs
+pi-gen-extra/stage?/SKIP
+!pi-gen-extra/stage?/[0-9][0-9]*/SKIP

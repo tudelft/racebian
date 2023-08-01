@@ -50,7 +50,11 @@ pi-flash :
 	@echo sudo umount "/dev/mmcblk?*"
 	@echo sudo dd bs=4M if=./imgs/your_image of=/dev/mmcblk? status=progress
 
-clean :
+clean : 
+	@echo -n
+ifneq (, $(shell mount | grep rootfs))
+	@echo "something went wrong, please unmount rootfs manually."
+endif
 	rm -rf build
 
 clean-imgs : 
