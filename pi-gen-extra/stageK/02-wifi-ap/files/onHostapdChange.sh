@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LOG_FILE=/var/log/onHostapdChange.log
-ARP_RETRIES=3
+ARP_RETRIES=10
 SLEEP_PERIOD=2
 i=0
 
