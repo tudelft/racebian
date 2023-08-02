@@ -1,5 +1,10 @@
 #!/bin/bash
 
+function help_and_exit {
+    echo "just read the README.md ffs.";
+    exit 1;
+}
+
 # handle arguments
 #deploy=$(echo "$@" | awk -F= '{a[$1]=$2} END {print(a["--deploy"])}')
 # key-value pairs (HOW IS THERE NOT A BUILT IN FOR THIS?)
@@ -14,6 +19,8 @@ do
     --debug) debug=t ;;
     --deploy) deploy=$right ;;
     --processes) processes=$right ;;
+    --help) help_and_exit ;;
+    -h) help_and_exit ;;
     esac
     shift
 done
@@ -87,7 +94,7 @@ cd /package/build-$GNU_HOST
 CMAKE_EXTRA=
 if [ "$debug" == t ]
 then
-    CMAKE_EXTRA=$CMAKE_EXTRA "-DCMAKE_BUILD_TYPE=Debug"
+    CMAKE_EXTRA+=" -DCMAKE_BUILD_TYPE=Debug"
 fi
 
 cmake -DCMAKE_TOOLCHAIN_FILE=$CROSS_TOOLCHAIN $CMAKE_EXTRA ..

@@ -35,9 +35,12 @@ docker plugin install vieux/sshfs
 Setup of the image:
 ```bash
 cd cross-compiler
-docker buildx build -f Dockerfile.cross --tag=pi-cross .
+docker buildx build -f Dockerfile.cross --tag=pi-cross-base .
+docker buildx build -f Dockerfile.cross.custom --tag=pi-cross .
 docker volume create rootfs # not sure where this is actually saved on disk... but somewhere
 ```
+
+If you need more dependencies (excluding C libraries! Install those on the pi) in your image, modify or copy & modify the `Dockerfile.cross.custom` file, and rerun the last `docker buildx` command above.
 
 ## Running the build container to build for Raspberry Pi
 
@@ -73,6 +76,11 @@ put at the _end_ of the command above:
 The container can be run interactively (the building is skipped and a shell is opened). Do not use in conjunction with any of the arguments above.
 ```bash
 docker run -it --entrypoint=/bin/bash -v rootfs:/rootfs --mount type=bind,src=./,dst=/package pi-cross
+```
+
+Pro-tip: add the following alias to your `~/.bashrc` so that you can omit `docker run -v rootfs:/rootfs --mount type=bind,src=./,dst=/package`:
+```bash
+alias pi-cross='docker run -v rootfs:/rootfs --mount type=bind,src=./,dst=/package pi-cross --processes=30'
 ```
 
 Remove all existing containers:
