@@ -1,0 +1,11 @@
+[Unit]
+Description=OpenOCD daemon wrapper
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/openocd -f /opt/openocd/openocd.cfg -f /opt/openocd/openocd_debug.cfg
+
+[Install]
+WantedBy=multi-user.target

@@ -111,6 +111,8 @@ pi-connect : pi-routing-up
 
 pi-attach-usb : 
 	modprobe vhci-hcd
+	-killall usbip
+	-killall usbip_event
 	cp ./usbip-client/usbip-attach.service /etc/systemd/system/
 	sed -i 's/REPLACE_ME/$(subst /,\/,$(shell pwd))\/usbip-client\/usbip-attach.sh/g' /etc/systemd/system/usbip-attach.service
 	for port in 0 1 2 3 4 5 6 7 8 9 ; do \
@@ -119,4 +121,3 @@ pi-attach-usb :
 	systemctl daemon-reload
 	systemctl stop usbip-attach.service
 	systemctl start usbip-attach.service
-
