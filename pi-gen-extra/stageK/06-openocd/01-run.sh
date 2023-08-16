@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+mkdir -p "${ROOTFS_DIR}/opt/openocd"
+
 install -m 644 files/openocd.service "${ROOTFS_DIR}/opt/openocd/openocd.service"
 ln -sf "/opt/openocd/openocd.service" "${ROOTFS_DIR}/etc/systemd/system/openocd.service"
 
