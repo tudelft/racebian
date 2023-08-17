@@ -169,6 +169,7 @@ h: signed short 2 byte
 H: unsigned short 2 byte
 i: signed int 4 byte
 I: unsigned int 4 byte
+f: float 4 byte
 """
 
 FAKE_GPS = {
@@ -183,6 +184,22 @@ FAKE_GPS = {
 }
 
 FAKE_GPS_format = '!IiiiHHHB'
+
+EXTERNAL_POSE = {
+    'time_ms': 0,
+    'enu_x': 0.,
+    'enu_y': 0.,
+    'enu_z': 0.,
+    'enu_xd': 0.,
+    'enu_yd': 0.,
+    'enu_zd': 0.,
+    'body_qi': 0.,
+    'body_qx': 0.,
+    'body_qy': 0.,
+    'body_qz': 0.,
+}
+
+EXTERNAL_POSE_format = '!Iffffffffff'
 
 
 
@@ -401,11 +418,29 @@ def receiveRigidBodyList( rigidBodyList, stamp ):
                 * ((180. * np.arctan2(dcm_1_0, dcm_0_0) / np.pi) % 360)
             )
             msg['numSat'] = 8
-            print(msg)
 
+            print(msg)
             msg_packed = struct.pack(FAKE_GPS_format, *msg.values())
-            sock.sendto(msg_packed, (UDP_IP, UDP_PORT))
+
+            msgE = EXTERNAL_POSE.copy()
+            msgE['time_ms'] = int(1000. * stamp)
+            msgE['enu_x'] = pos[0]
+            msgE['enu_y'] = pos[1]
+            msgE['enu_z'] = pos[2]
+            msgE['enu_xd'] = vel[0]
+            msgE['enu_yd'] = vel[1]
+            msgE['enu_zd'] = vel[2]
+            msgE['body_qi'] = quat[3]
+            msgE['body_qx'] = quat[0]
+            msgE['body_qy'] = quat[1]
+            msgE['body_qz'] = quat[2]
+
+            print(msgE)
+            msgE_packed = struct.pack(EXTERNAL_POSE_format, *msgE.values())
+
+            sock.sendto(msg_packed+msgE_packed, (UDP_IP, UDP_PORT))
             print(f'Send message {j}')
+
         else:
             msg = PprzMessage("datalink", "EXTERNAL_POSE")
             msg['ac_id'] = id_dict[i]
