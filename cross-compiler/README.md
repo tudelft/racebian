@@ -67,7 +67,7 @@ put at the _end_ of the command above:
 --sync                          # syncronize the rootfs with the pi. Do this on first command, or if libraries/includes changed in the /lib or /usr dir of the pi. Omitting is much faster, of course.
 --clean-build                   # deletes the entire build-aarch64-linux-gnu folder from the local tree before compilation
 --debug                         # sets -DCMAKE_BUILD_TYPE=Debug
---deploy=/some/directory/on/pi  # upload the build-aarch64-linux-gnu directory to pi using rsync after building. NOTE: this will delete everything in that directory!
+--deploy=<DEPLOY_PATH>          # upload the build-aarch64-linux-gnu directory to the pi using rsync after building. Requires project() to be set in CMakeLists.txt and it will be uploaded to <DEPLAY_PATH>/<CMAKE_PROJECT_NAME>/build-aarch64-linux-gnu
 --processes=8                   # passed to make as make -j <processes>. Default is 8.
 ```
 

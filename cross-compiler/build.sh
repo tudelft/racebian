@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 function help_and_exit {
     echo "just read the README.md ffs.";
@@ -38,6 +39,19 @@ then
     echo "Package not mounted. Run container with --mount type=bind,src=/path/to/package/root/,dest=$PACKAGE"
     exit 1;
 fi
+
+
+# check for cmake project define
+if [ ! -z $deploy ]
+then
+    CMAKE_PROJECT=$(sed -n -e 's/^project(\(.*\))/\1/p' < $PACKAGE/CMakeLists.txt)
+    if [[ -z $CMAKE_PROJECT ]] || [[ $(wc -l <<< $CMAKE_PROJECT) -gt 1 ]]
+    then
+        echo "CMakeLists.txt must contain a single project statement (to set the deploy directory)"
+        exit 1;
+    fi
+fi
+
 
 ## update rootfs environment in the volume
 # rsync options:
@@ -103,15 +117,16 @@ make -j $processes # TODO: make the thread count a parameter that can be passed 
 
 # TODO: error handling, so we dont upload failed builds
 
-# upload if necessary and if make was a success
-if [ ! -z $deploy ] && [ $? -eq 0 ]
+# upload if necessary
+if [ ! -z $deploy ]
 then
     echo -n "Deploying build... "
     cd /package && \
+    echo build-$GNU_HOST $REMOTE_USER@$REMOTE_IP:"$deploy/$CMAKE_PROJECT/"
     rsync -rR --delete-after --links --copy-unsafe-links --perms \
         --rsh "/usr/bin/sshpass -p $REMOTE_PASSWORD ssh -o StrictHostKeyChecking=no -l $REMOTE_USER" \
         --timeout=3 \
-        build-$GNU_HOST $REMOTE_USER@$REMOTE_IP:"$deploy"
+        build-$GNU_HOST $REMOTE_USER@$REMOTE_IP:"$deploy/$CMAKE_PROJECT/"
     #--rsync-path="sudo rsync" \
     echo "build deployed"
 else

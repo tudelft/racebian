@@ -1,4 +1,5 @@
 build/
+build*/
 SKIP_IMAGES
 linux/
 imgs/
