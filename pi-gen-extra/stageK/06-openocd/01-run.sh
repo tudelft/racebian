@@ -5,6 +5,7 @@ mkdir -p "${ROOTFS_DIR}/opt/openocd"
 install -m 644 files/openocd.service "${ROOTFS_DIR}/opt/openocd/openocd.service"
 ln -sf "/opt/openocd/openocd.service" "${ROOTFS_DIR}/etc/systemd/system/openocd.service"
 
+install -m 644 files/helpers.tcl "${ROOTFS_DIR}/opt/openocd/"
 install -m 644 files/openocd.cfg "${ROOTFS_DIR}/opt/openocd/"
 install -m 644 files/openocd_debug.cfg "${ROOTFS_DIR}/opt/openocd/"
 ln -sf /usr/share/openocd/scripts/target/stm32h7x.cfg "${ROOTFS_DIR}/opt/openocd/chip.cfg"

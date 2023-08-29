@@ -86,6 +86,8 @@ sudo dd bs=4M if=./build/pi-img/bin/<NAME OF THE IMAGE> of=/dev/<SD CARD DEVICE,
 ## TODO:
 
 - [x] remove the cross compiled BF-configurator, if usbip works.
-- ~~[] write ansible playbooks for uploading betaflight `hex` files~~ no need thanks to `usbip`
-- [] dockerize this to eliminate build-system dependencies
-- [] add betaflight_race receiver and optitrack code
+- ~~[ ] write ansible playbooks for uploading betaflight `hex` files~~ no need thanks to `usbip`
+- [ ] dockerize this to eliminate build-system dependencies
+- [x] add betaflight_race receiver and optitrack code
+- [ ] put `make pi-attach-usb` commands in pre-start/post-exit hooks of the systemd service
+- [ ] reformulate more `make` commands as actual commands, maybe with a `pi-util` shell or python script
