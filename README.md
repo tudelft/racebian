@@ -6,17 +6,28 @@ Pi-Zero Companion Computer for Betaflight
 
 Tested for Ubuntu 22.04 host computer. First install these packages:
 ```bash
-sudo apt install make iptables
+sudo apt install make iptables linux-tools-common linux-tools-$(uname -r) hwdata
+```
+
+Then clone this repo, and install the custom commands and services:
+```bash
+sudo make install-pi-tools
 ```
 
 1. Flash a `Racebian` image from `https://github.com/tblaha/pi-kompaan/releases` or build yourself (see below).
 2. Power the PI and connect to the WIFI network it hosts
     - SSID is `kompaan` by default, password `betaflight`.
     - Can be configured in `/etc/hostapd/hostapd.conf` if you mount the flashed SD card (or in `./config` of this repo, if you build the image yourself)
-3. To expose the Pi zero's USB port to your local laptop: `sudo make pi-attach-usb`
-4. To connect to the Pi, run `sudo make pi-connect` and enter password (`pi` by default).
-    - This also sets up appropriate `iptables` rules on the host so that the pi can access the outside world through another interface on the host computer.
-    - ~~If you can connect, but the `pi` still doesnt have internet, try to reconnect to the Wifi, or run `sudo route add default gw 10.0.0.<your_ip> wlan0`~~ (should be fixed in release 0.2.0)
+    - you can now connect via `ssh pi@10.0.0.1` with password `pi`
+3. To expose the Pi zero's USB port to your local laptop, just start the service
+    - `sudo systemctl start pi-usb-attach`
+    - if it ever acts up, just restart with `sudo systemctl restart pi-usb-attach`
+4. To let the Pi access all other networks of the laptop client:
+    - `sudo pi-routing-up 10.0.0.1`
+    - (to restrict to only a certain interface, do `sudo pi-routing-up --iface=<INTERFACE> 10.0.0.1`)
+5. ~~if the Pi still doesn't have internet/optitrack connection try this:~~ (should be fixed in 0.2.0!)
+    - on the Pi, run `sudo route add default gw 10.0.0.<your_laptop_ip> wlan0`
+    - you can find the laptop ip by running `ip a | grep 10.0.0.` on the laptop.
 
 ## Deploy cmake applications on the Pi
 
