@@ -1,3 +1,7 @@
 tree
 # for UART debugging
 minicom
+# for python stuff like optitrack forwarder
+python3-numpy
+python3-pip
+tmux
