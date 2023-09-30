@@ -1,0 +1,15 @@
+[Unit]
+Description=Serial port to network proxy
+Documentation=man:ser2net(8)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+EnvironmentFile=-/etc/default/ser2net
+ExecStart=/usr/sbin/ser2net -n -c $CONFFILE -P /run/ser2net.pid
+Type=exec
+#Restart=on-failure
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
