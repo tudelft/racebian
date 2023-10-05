@@ -63,8 +63,8 @@ clean-imgs :
 
 ## ---- Networking functions ---- ##
 install-pi-tools : 
-	install -m 755 -o root ./usbip-client/usbip-attach.sh /usr/bin/pi-usb-attach
-	install -m 644 -o root ./usbip-client/usbip-attach.service /etc/systemd/system/pi-usb-attach.service
+#	install -m 755 -o root ./usbip-client/usbip-attach.sh /usr/bin/pi-usb-attach
+#	install -m 644 -o root ./usbip-client/usbip-attach.service /etc/systemd/system/pi-usb-attach.service
 	install -m 755 -o root ./routing/routing-up.sh /usr/bin/pi-routing-up
 	install -m 755 -o root ./routing/routing-down.sh /usr/bin/pi-routing-down
-	systemctl daemon-reload
+#	systemctl daemon-reload

@@ -6,7 +6,7 @@ Pi-Zero Companion Computer for Betaflight
 
 Tested for Ubuntu 22.04 host computer. First install these packages:
 ```bash
-sudo apt install make iptables linux-tools-common linux-tools-$(uname -r) hwdata
+sudo apt install make iptables
 ```
 
 Then clone this repo, and install the custom commands and services:
@@ -19,7 +19,7 @@ sudo make install-pi-tools
     - SSID is `kompaan` by default, password `betaflight`.
     - Can be configured in `/etc/hostapd/hostapd.conf` if you mount the flashed SD card (or in `./config` of this repo, if you build the image yourself)
     - you can now connect via `ssh pi@10.0.0.1` with password `pi`
-3. To expose the Pi zero's USB port to your local laptop, just start the service
+3. ~~To expose the Pi zero's USB port to your local laptop, just start the service~~ Version 0.4.0: we are now using `ser2net` to tunnel the serial USB via TCP which doesn't need client configuration and is more stable
     - `sudo systemctl start pi-usb-attach`
     - if it ever acts up, just restart with `sudo systemctl restart pi-usb-attach`
 4. To let the Pi access all other networks of the laptop client:
@@ -39,6 +39,12 @@ Solution: cross-compile on a laptop and only deploy the binaries. This makes the
 ## Debugging / Flashing an SWD-capable microcontroller via the Pi
 
 This is relatively easy to setup and super useful. See [README_SWD.md](README_SWD.md).
+
+
+## Downloading files from USB mass storage device
+
+When connecting a USB mass storage device (such as a flight controller in MSC mode), `ser2net` cannot forward this, because a USB MSC device is not serial (but rather appears as a disk such as `/dev/sda`). A neat way to download data from this is to mount the storage device, and use `rsync` to download via `ssh`. An example script that can be used as a VS Code task is provided in [usb-download](usb-download).
+
 
 
 ## Optional: Building the image
@@ -100,5 +106,5 @@ sudo dd bs=4M if=./build/pi-img/bin/<NAME OF THE IMAGE> of=/dev/<SD CARD DEVICE,
 - ~~[ ] write ansible playbooks for uploading betaflight `hex` files~~ no need thanks to `usbip`
 - [ ] dockerize this to eliminate build-system dependencies
 - [x] add betaflight_race receiver and optitrack code
-- [ ] put `make pi-attach-usb` commands in pre-start/post-exit hooks of the systemd service
-- [ ] reformulate more `make` commands as actual commands, maybe with a `pi-util` shell or python script
+- ~~[ ] put `make pi-attach-usb` commands in pre-start/post-exit hooks of the systemd service~~
+- [x] reformulate more `make` commands as actual commands, maybe with a `pi-util` shell or python script
