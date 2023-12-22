@@ -10,7 +10,7 @@ ifneq ("$(LC_ALL)","en_US.UTF-8")
 endif
 
 # Note: individual stages have not been configured with pre-requisites. Run them in the correct order manually!
-.DEFAULT_GOAL := pi-image-kompaan
+.DEFAULT_GOAL := pi-image-racebian
 pi-stage1 : locale_check
 	rm -f ${PIGEN_DIR}/stage0/SKIP
 	rm -f ${PIGEN_DIR}/stage1/SKIP
@@ -43,7 +43,7 @@ pi-image-lite :  locale_check
 	$(MAKE) -f $(THIS_FILE) pi-stage1
 	$(MAKE) -f $(THIS_FILE) pi-stage2
 
-pi-image-kompaan : pi-image-lite locale_check
+pi-image-racebian : pi-image-lite locale_check
 	$(MAKE) -f $(THIS_FILE) pi-stageK
 
 pi-flash : 

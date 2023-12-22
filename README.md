@@ -1,4 +1,4 @@
-# pi-kompaan
+# racebian
 
 Pi-Zero Companion Computer for Betaflight
 
@@ -14,9 +14,9 @@ Then clone this repo, and install the custom commands and services:
 sudo make install-pi-tools
 ```
 
-1. Flash a `Racebian` image from `https://github.com/tblaha/pi-kompaan/releases` or build yourself (see below).
+1. Flash a `Racebian` image from `https://github.com/tblaha/racebian/releases` or build yourself (see below).
 2. Power the PI and connect to the WIFI network it hosts
-    - SSID is `kompaan` by default, password `betaflight`.
+    - SSID is `racebian` by default, password `betaflight`.
     - Can be configured in `/etc/hostapd/hostapd.conf` if you mount the flashed SD card (or in `./config` of this repo, if you build the image yourself)
     - you can now connect via `ssh pi@10.0.0.1` with password `pi`
 3. ~~To expose the Pi zero's USB port to your local laptop, just start the service~~ Version 0.4.0: we are now using `ser2net` to tunnel the serial USB via TCP which doesn't need client configuration and is more stable
@@ -81,7 +81,7 @@ sudo locale-gen en_US.UTF-8
 
 Then clone this repo *in an ext2 or ext4 filesystem, NOT NTFS*:
 ```bash
-git clone --recurse-submodules git@github.com:tblaha/pi-kompaan.git
+git clone --recurse-submodules git@github.com:tblaha/racebian.git
 ```
 
 ### Building
@@ -89,7 +89,7 @@ git clone --recurse-submodules git@github.com:tblaha/pi-kompaan.git
 Build the image *with a stable Ethernet connection* (it didnt find some packages when I tried via wifi and quit). The build script uses change-root. Do not interrupt it with CTRL-C or else you may have to reboot your system.
 ```bash
 # sudo make clean # optional
-LC_ALL=en_US.UTF-8 sudo make pi-image-kompaan
+LC_ALL=en_US.UTF-8 sudo make pi-image-racebian
 ```
 
 ### Flashing

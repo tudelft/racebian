@@ -12,7 +12,7 @@ DEPLOY_DIR="$(realpath "$BASE_DIR/../../imgs/")"
 DEPLOY_COMPRESSION=none
 
 LOCALE_DEFAULT="en_US.UTF-8"
-TARGET_HOSTNAME="kompaan"
+TARGET_HOSTNAME="racebian"
 KEYBOARD_KEYMAP="us"
 KEYBOARD_LAYPOUT="English (US)"
 TIMEZONE_DEFAULT="Europe/Amsterdam"
@@ -29,7 +29,7 @@ ENABLE_SSH=1
 #STAGE_LIST="stage0 stage1" # only compile up to stage1 for now (minimal system). bash variables now, see Makefile
 
 #### CUSTOM OPTIONS ####
-export WIFI_AP_SSID=kompaan
+export WIFI_AP_SSID=racebian
 export WIFI_AP_PASSPHRASE=betaflight
 export ROUTE_THROUGH_CLIENTS=1
 
