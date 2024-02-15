@@ -7,7 +7,7 @@ install -m 644 files/ser2net.yaml       "${ROOTFS_DIR}/etc/ser2net.yaml"
 install -m 644 files/ser2net.service    "${ROOTFS_DIR}/lib/systemd/system/ser2net.service"
 
 # enable unit
-on_chroot << EOF
-systemctl daemon-reload
-systemctl enable ser2net.service
-EOF
+#on_chroot << EOF
+#systemctl daemon-reload
+#systemctl enable ser2net.service
+#EOF
