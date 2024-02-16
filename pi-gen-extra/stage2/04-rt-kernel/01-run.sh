@@ -6,9 +6,10 @@ git clone --depth=1 --branch=1.20230405 https://github.com/raspberrypi/linux "${
 cd ${STAGE_WORK_DIR}/linux
 
 # get and apply RT patch-set. Not the same patchlevel as above, hope it still works
-wget https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/6.1/patch-6.1.38-rt13-rc1.patch.gz
-gunzip patch-6.1.38-rt13-rc1.patch.gz
-cat patch-6.1.38-rt13-rc1.patch | patch -p1
+RT_VERSION=patches-6.1.38-rt13-rc1
+wget https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/6.1/older/${RT_VERSION}.tar.gz
+tar xfvz ${RT_VERSION}.tar.gz
+cat ${RT_VERSION} | patch -p1
 
 # configure the kernel
 KERNEL=kernel8
