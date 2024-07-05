@@ -32,7 +32,3 @@ ENABLE_SSH=1
 export WIFI_AP_SSID=racebian
 export WIFI_AP_PASSPHRASE=betaflight
 export ROUTE_THROUGH_CLIENTS=1
-
-
-
-

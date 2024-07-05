@@ -29,12 +29,6 @@ sudo make install-pi-tools
     - on the Pi, run `sudo route add default gw 10.0.0.<your_laptop_ip> wlan0`
     - you can find the laptop ip by running `ip a | grep 10.0.0.` on the laptop.
 
-## Deploy cmake applications on the Pi
-
-Building directly on the Pi is inconvenient, because either the sources have to be modified Pi, or transferred via some mechanism. In any case building takes much longer because the Pi is much slower than any laptop and it is stateful (eg. there could be untracked changes to the sources on the Pi that may be forgotten about).
-
-Solution: cross-compile on a laptop and only deploy the binaries. This makes the Pi completely stateless and the entire process much much smoother. See [cross-compiler](cross-compiler/README.md).
-
 
 ## Debugging / Flashing an SWD-capable microcontroller via the Pi
 
