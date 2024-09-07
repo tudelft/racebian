@@ -24,6 +24,7 @@ make -j16 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig
 make -j16 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
 
 # install kernel
+rm -rf "${ROOTFS_DIR}/lib/modules/6.1.21-v8+" # if not properly cleaned?
 env PATH=$PATH make -j16 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- INSTALL_MOD_PATH="${ROOTFS_DIR}" modules_install
 
 #cp mnt/fat32/"${KERNEL}".img mnt/fat32/"${KERNEL}"-backup.img
@@ -33,3 +34,18 @@ cp arch/arm64/boot/dts/overlays/*.dtb* "${ROOTFS_DIR}/boot/overlays/"
 cp arch/arm64/boot/dts/overlays/README "${ROOTFS_DIR}/boot/overlays/"
 
 cd "${BASE_DIR}"
+
+# copy kernel headers and build tools
+rm -rf "${ROOTFS_DIR}/lib/modules/6.1.21-v8+/source"
+rm -rf "${ROOTFS_DIR}/lib/modules/6.1.21-v8+/build"
+mkdir "${ROOTFS_DIR}/lib/modules/6.1.21-v8+/source"
+cp -r ${STAGE_WORK_DIR}/linux/.config "${ROOTFS_DIR}/lib/modules/6.1.21-v8+/source"
+cp -r ${STAGE_WORK_DIR}/linux/Makefile "${ROOTFS_DIR}/lib/modules/6.1.21-v8+/source"
+cp -r ${STAGE_WORK_DIR}/linux/Module.symvers "${ROOTFS_DIR}/lib/modules/6.1.21-v8+/source"
+cp -r ${STAGE_WORK_DIR}/linux/arch "${ROOTFS_DIR}/lib/modules/6.1.21-v8+/source"
+cp -r ${STAGE_WORK_DIR}/linux/include "${ROOTFS_DIR}/lib/modules/6.1.21-v8+/source"
+cp -r ${STAGE_WORK_DIR}/linux/tools "${ROOTFS_DIR}/lib/modules/6.1.21-v8+/source"
+
+# need to grab build tools from old kernel because the scripts are still not crosscompiled because i dont even remotely have the patience to sort this properly, argdsagfas.dg.fhadfgaeaer
+ln -sf "/lib/linux-kbuild-5.10/scripts" "${ROOTFS_DIR}/lib/modules/6.1.21-v8+/source/scripts"
+ln -sf "/lib/modules/6.1.21-v8+/source" "${ROOTFS_DIR}/lib/modules/6.1.21-v8+/build"
