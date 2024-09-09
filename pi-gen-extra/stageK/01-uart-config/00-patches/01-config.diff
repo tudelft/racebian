@@ -1,13 +1,12 @@
-Index: jessie-stage2/rootfs/boot/config.txt
+Index: jessie-stage2/rootfs/boot/firmware/config.txt
 ===================================================================
---- jessie-stage2.orig/rootfs/boot/config.txt
-+++ jessie-stage2/rootfs/boot/config.txt
-@@ -49,6 +49,8 @@
- #dtoverlay=gpio-ir-tx,gpio_pin=18
- 
- # Additional overlays and parameters are documented /boot/overlays/README
+--- jessie-stage2.orig/rootfs/boot/firmware/config.txt
++++ jessie-stage2/rootfs/boot/firmware/config.txt
+@@ -14,5 +14,7 @@
+ # Additional overlays and parameters are documented
+ # /boot/firmware/overlays/README
 +# disable bluetooth module to get PL011 UART mapped to GPIO 14/15
 +dtoverlay=disable-bt
- 
- # Enable audio (loads snd_bcm2835)
- dtparam=audio=on
+
+ # Automatically load overlays for detected cameras
+ camera_auto_detect=1

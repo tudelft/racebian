@@ -32,4 +32,4 @@ if [ "${ROUTE_THROUGH_CLIENTS}" == "1" ]; then
 fi
 
 ## disable ipv6 to reduce interrupt overhead
-echo "ipv6.disable=1" >> "${ROOTFS_DIR}/boot/cmdline.txt"
+echo "ipv6.disable=1" >> "${ROOTFS_DIR}/boot/firmware/cmdline.txt"

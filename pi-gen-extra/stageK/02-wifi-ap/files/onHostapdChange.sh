@@ -18,7 +18,7 @@ then
         if [[ $CLIENT_IP =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             # add as gateway
             echo "Adding route $CLIENT_IP" >> $LOG_FILE
-            route add default gw $CLIENT_IP wlan0
+            route add default gw $CLIENT_IP wlan1
             break
         fi
 
@@ -36,6 +36,6 @@ then
     # add as gateway
     echo "Disconnect attempt $i: found CLIENT_IP $CLIENT_IP" >> $LOG_FILE
     if [[ $CLIENT_IP =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-        route del default gw $CLIENT_IP wlan0
+        route del default gw $CLIENT_IP wlan1
     fi
 fi

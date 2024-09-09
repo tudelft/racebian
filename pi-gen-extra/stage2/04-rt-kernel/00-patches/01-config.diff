@@ -1,7 +1,7 @@
-Index: jessie-stage2/rootfs/boot/config.txt
+Index: jessie-stage2/rootfs/boot/firmware/config.txt
 ===================================================================
---- jessie-stage2.orig/rootfs/boot/config.txt
-+++ jessie-stage2/rootfs/boot/config.txt
+--- jessie-stage2.orig/rootfs/boot/firmware/config.txt
++++ jessie-stage2/rootfs/boot/firmware/config.txt
 @@ -1,6 +1,7 @@
  # For more options and information see
  # http://rpf.io/configtxt

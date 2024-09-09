@@ -6,7 +6,7 @@ fi
 
 ## tblaha: re-format cmdline.txt for easier patching
 # split up all arguments to new lines
-sed -i 's/ \s*/\n/g' "${ROOTFS_DIR}/boot/cmdline.txt"
+sed -i 's/ \s*/\n/g' "${ROOTFS_DIR}/boot/firmware/cmdline.txt"
 # remove empty lines
-sed -i '/^$/d' "${ROOTFS_DIR}/boot/cmdline.txt"
+sed -i '/^$/d' "${ROOTFS_DIR}/boot/firmware/cmdline.txt"
 # hope there are no commented lines..

@@ -1,7 +1,7 @@
 IMG_NAME=Racebian
 USE_QCOW2=0
 USE_QEMU="0" # can be set to 1 to enable a QEMU emulatable image
-RELEASE=bullseye
+RELEASE=bookworm
 
 # paths workaround to have the pi-gen as a submodule
 #BASE_DIR="./"

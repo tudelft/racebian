@@ -6,7 +6,7 @@ Pi-Zero Companion Computer for Betaflight
 
 Tested for Ubuntu 22.04 host computer. First install these packages:
 ```bash
-sudo apt install make iptables net-tools
+sudo apt install make iptables net-tools arch-test
 ```
 
 Then clone this repo, and install the custom commands and services:

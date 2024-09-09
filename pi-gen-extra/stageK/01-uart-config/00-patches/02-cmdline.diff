@@ -1,7 +1,7 @@
-Index: jessie-stage2/rootfs/boot/cmdline.txt
+Index: jessie-stage2/rootfs/boot/firmware/cmdline.txt
 ===================================================================
---- jessie-stage2.orig/rootfs/boot/cmdline.txt
-+++ jessie-stage2/rootfs/boot/cmdline.txt
+--- jessie-stage2.orig/rootfs/boot/firmware/cmdline.txt
++++ jessie-stage2/rootfs/boot/firmware/cmdline.txt
 @@ -1,7 +1,6 @@
 -console=serial0,115200
  console=tty1

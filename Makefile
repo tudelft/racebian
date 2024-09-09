@@ -16,6 +16,12 @@ pi-stage1 : locale_check
 	rm -f ${PIGEN_DIR}/stage1/SKIP
 	cd ${PIGEN_DIR} && STAGE_LIST="stage0 stage1" ./build.sh -c ../../config
 
+pi-stage2-old : locale_check
+	rm -f ${PIGEN_DIR}/stage0/SKIP
+	rm -f ${PIGEN_DIR}/stage1/SKIP
+	rm -f ${PIGEN_DIR}/stage2/SKIP
+	cd ${PIGEN_DIR} && STAGE_LIST="stage0 stage1 stage2" ./build.sh -c ../../config
+
 pi-stage2 : locale_check
 	touch ${PIGEN_DIR}/stage0/SKIP
 	touch ${PIGEN_DIR}/stage1/SKIP
