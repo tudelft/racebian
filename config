@@ -29,6 +29,11 @@ ENABLE_SSH=1
 #STAGE_LIST="stage0 stage1" # only compile up to stage1 for now (minimal system). bash variables now, see Makefile
 
 #### CUSTOM OPTIONS ####
+# wifi access point
 export WIFI_AP_SSID=racebian
 export WIFI_AP_PASSPHRASE=betaflight
 export ROUTE_THROUGH_CLIENTS=1
+
+# wifi client connection
+export WIFI_CLIENT_SSID=racebian
+export WIFI_CLIENT_PASSPHRASE=betaflight
