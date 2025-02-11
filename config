@@ -35,5 +35,5 @@ export WIFI_AP_PASSPHRASE=betaflight
 export ROUTE_THROUGH_CLIENTS=1
 
 # wifi client connection
-export WIFI_CLIENT_SSID=racebian
+export WIFI_CLIENT_SSID=UbuntuHotspot
 export WIFI_CLIENT_PASSPHRASE=betaflight

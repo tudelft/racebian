@@ -1,19 +1,19 @@
 [connection]
-id=preconfigured
+id=Client
 uuid=fae9327e-d3b5-47e0-9639-fe81716b2b3a
 type=wifi
-interface-name=wlan0
+interface-name=wlan1
 autoconnect=true
 
 [wifi]
 mode=infrastructure
-ssid=Royalholidayhomes
+ssid=WIFI_CLIENT_SSID
 powersave=2
 hidden=false
 
 [wifi-security]
 key-mgmt=wpa-psk
-psk=Royal@2024
+psk=WIFI_CLIENT_PASSPHRASE
 
 [ipv4]
 method=auto
