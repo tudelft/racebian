@@ -10,6 +10,12 @@ install -m 644 files/openocd.cfg "${ROOTFS_DIR}/opt/openocd/"
 install -m 644 files/openocd_debug.cfg "${ROOTFS_DIR}/opt/openocd/"
 ln -sf /usr/share/openocd/scripts/target/stm32h7x.cfg "${ROOTFS_DIR}/opt/openocd/chip.cfg"
 
+# for new bookwork distro we need special permissions
+on_chroot << EOF
+groupadd gpio
+usermod -aG gpio pi
+EOF
+
 # wrap usbipd in a systemd service: https://unix.stackexchange.com/questions/528769/usbip-startup-with-systemd
 #mkdir -p "${ROOTFS_DIR}/opt/usbip"
 #install -m 644 files/usbipd.service "${ROOTFS_DIR}/opt/usbip/"
