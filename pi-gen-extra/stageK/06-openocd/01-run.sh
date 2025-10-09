@@ -14,6 +14,7 @@ ln -sf /usr/share/openocd/scripts/target/stm32h7x.cfg "${ROOTFS_DIR}/opt/openocd
 on_chroot << EOF
 groupadd gpio
 usermod -aG gpio pi
+usermod -aG dialout pi
 EOF
 
 # wrap usbipd in a systemd service: https://unix.stackexchange.com/questions/528769/usbip-startup-with-systemd
