@@ -12,7 +12,6 @@ ln -sf /usr/share/openocd/scripts/target/stm32h7x.cfg "${ROOTFS_DIR}/opt/openocd
 
 # for new bookwork distro we need special permissions
 on_chroot << EOF
-groupadd gpio
 usermod -aG gpio pi
 usermod -aG dialout pi
 EOF

@@ -6,7 +6,7 @@ Index: jessie-stage2/rootfs/boot/firmware/config.txt
  # For more options and information see
  # http://rpf.io/configtxt
  # Some settings may impact device functionality. See link above for details
-+kernel=kernel8-rt.img
++kernel=kernel_2712-rt.img
  
  # uncomment if you get no picture on HDMI for a default "safe" mode
  #hdmi_safe=1
