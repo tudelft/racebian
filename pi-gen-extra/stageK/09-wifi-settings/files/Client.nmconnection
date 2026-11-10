@@ -2,8 +2,9 @@
 id=Client
 uuid=fae9327e-d3b5-47e0-9639-fe81716b2b3a
 type=wifi
-interface-name=wlan1
+interface-name=wlan0
 autoconnect=true
+autoconnect-priority=10
 
 [wifi]
 mode=infrastructure

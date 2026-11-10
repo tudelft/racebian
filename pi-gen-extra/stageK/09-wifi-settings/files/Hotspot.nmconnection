@@ -4,6 +4,7 @@ uuid=0ae9327e-d3b5-47e0-9639-fe81716b2b3a
 type=wifi
 interface-name=wlan0
 autoconnect=true
+autoconnect-priority=0
 
 [wifi]
 band=bg
