@@ -10,7 +10,7 @@ autoconnect-priority=0
 band=bg
 mode=ap
 ssid=WIFI_AP_SSID
-channel=13
+channel=11
 powersave=2
 hidden=false
 
