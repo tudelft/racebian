@@ -1,8 +1,7 @@
-# Creates the bridge's TLS certificate on first boot if it does not exist yet.
+# Creates the bridge's TLS certificate if there is no valid one yet (first boot, or after
+# the files got truncated). The validity check lives in the script, so no Condition*= here.
 [Unit]
 Description=Generate TLS certificate for the Indiflight WebSocket bridge
-ConditionPathExists=|!/opt/indiflight-bridge/key.pem
-ConditionPathExists=|!/opt/indiflight-bridge/cert.pem
 Before=websocketd.service
 
 [Service]
