@@ -20,6 +20,7 @@ sudo make install-pi-tools
     - Can be configured in `/etc/hostapd/hostapd.conf` if you mount the flashed SD card (or in `./config` of this repo, if you build the image yourself)
     - you can now connect via `ssh pi@10.0.0.1` with password `pi`
 3. ~~To expose the Pi zero's USB port to your local laptop, just start the service~~ Version 0.4.0: we are now using `ser2net` to tunnel the serial USB via TCP which doesn't need client configuration and is more stable
+    - Now: `ser2net` is installed but disabled. Instead, a `websocketd` + `socat` bridge exposes the flight controller (`/dev/indiflight`, a udev symlink for USB ID `0483:5740`) as a TLS WebSocket on `wss://10.0.0.1:5761` for the Indiflight web configurator. The self-signed certificate is generated on first boot; open `https://10.0.0.1:5761` once in the browser to accept it. Switch back with `sudo systemctl disable --now websocketd && sudo systemctl enable --now ser2net`.
     - `sudo systemctl start pi-usb-attach`
     - if it ever acts up, just restart with `sudo systemctl restart pi-usb-attach`
 4. To let the Pi access all other networks of the laptop client:

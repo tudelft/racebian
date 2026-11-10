@@ -1,0 +1,42 @@
+# WebSocket-to-serial bridge for the Indiflight web configurator.
+# Installed by pi-gen-extra/stageK/10-ws-bridge. Manage with:
+#   systemctl {start,stop,status} websocketd; journalctl -u websocketd -f
+[Unit]
+Description=Indiflight WebSocket serial bridge (websocketd + socat)
+After=network-online.target ws-bridge-cert.service
+Wants=network-online.target
+Requires=ws-bridge-cert.service
+
+[Service]
+Type=simple
+
+# Adjust these. /dev/indiflight is a symlink created by /etc/udev/rules.d/99-indiflight.rules.
+Environment=PORT=5761
+Environment=SERIAL=/dev/indiflight
+Environment=BAUD=115200
+Environment=BRIDGE_DIR=/opt/indiflight-bridge
+
+# Throwaway unprivileged user; dialout grants access to the serial device.
+DynamicUser=yes
+SupplementaryGroups=dialout
+
+# systemd (running as root) hands the key to the service, so key.pem can stay root-only (0600).
+# %d is the credentials directory the copies land in.
+LoadCredential=cert.pem:/opt/indiflight-bridge/cert.pem
+LoadCredential=key.pem:/opt/indiflight-bridge/key.pem
+
+ExecStart=/usr/bin/websocketd --port=${PORT} --binary=true \
+    --ssl --sslcert=%d/cert.pem --sslkey=%d/key.pem \
+    --staticdir=${BRIDGE_DIR}/www \
+    /usr/bin/socat - ${SERIAL},b${BAUD},raw,echo=0
+
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

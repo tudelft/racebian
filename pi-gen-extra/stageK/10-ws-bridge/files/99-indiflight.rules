@@ -1,0 +1,3 @@
+# Stable name for the flight controller's USB CDC serial port, used by websocketd.service.
+# 0483:5740 is STMicroelectronics' default "Virtual COM Port" ID (used by Indiflight/Betaflight).
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", SYMLINK+="indiflight"

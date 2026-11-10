@@ -1,0 +1,14 @@
+# Creates the bridge's TLS certificate on first boot if it does not exist yet.
+[Unit]
+Description=Generate TLS certificate for the Indiflight WebSocket bridge
+ConditionPathExists=|!/opt/indiflight-bridge/key.pem
+ConditionPathExists=|!/opt/indiflight-bridge/cert.pem
+Before=websocketd.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/opt/indiflight-bridge/ws-bridge-cert.sh
+
+[Install]
+WantedBy=multi-user.target

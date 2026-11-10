@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indiflight bridge</title>
+<style>
+  :root { --bg: #f6f7f9; --fg: #1d2129; --muted: #5c6370; --ok: #1f8f4e; --card: #ffffff; --border: #dde1e6; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #15171b; --fg: #e6e8eb; --muted: #9aa1ab; --ok: #4cc884; --card: #1e2126; --border: #30343b; }
+  }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--fg);
+         font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 26rem; margin: 1rem; padding: 2rem; background: var(--card); border: 1px solid var(--border);
+         border-radius: 12px; text-align: center; }
+  h1 { font-size: 1.25rem; margin: 0.5rem 0; }
+  p { color: var(--muted); margin: 0.5rem 0 1.25rem; }
+  .tick { font-size: 2.5rem; color: var(--ok); }
+  button { font: inherit; padding: 0.5rem 1.25rem; border-radius: 8px; border: 1px solid var(--border);
+           background: var(--bg); color: var(--fg); cursor: pointer; }
+</style>
+</head>
+<body>
+<main>
+  <div class="tick">&#10003;</div>
+  <h1>Certificate accepted</h1>
+  <p>This browser now trusts the bridge at <strong id="host"></strong>.
+     Close this tab and click <em>Connect</em> in the configurator again.</p>
+  <button id="close" type="button">Close tab</button>
+</main>
+<script>
+  document.getElementById("host").textContent = location.host;
+  document.getElementById("close").addEventListener("click", function () {
+    window.close();
+    // Browsers only let a script close tabs it opened itself; otherwise leave a hint.
+    this.textContent = "You can close this tab now";
+    this.disabled = true;
+  });
+</script>
+</body>
+</html>
